@@ -5,8 +5,6 @@ from ipaddress import IPv4Address, IPv6Address
 from construct.core import *
 from construct.lib import *
 
-## code to be updated is indicated by BEGIN_CODE
-## and END_CODE
 
 IIV_Nonce = Struct(
     "salt" / Bytes(4),
@@ -128,14 +126,14 @@ class SA:
 
         """
         if self.esp_enc_alg  == "ENCR_AES_GCM_16_IIV":
-          ## BEGIN code to update
+
             nonce = { 'salt' : self.salt, \
                     'iv' : {'seq_num_counter' : self.seq_num_counter } }
             byte_nonce = IIV_Nonce.build(\
                         nonce, 
                         ext_seq_num_flag=self.ext_seq_num_flag)
             return [ AES.new(self.esp_enc_key,AES.MODE_GCM,nonce=byte_nonce,mac_len=self.icv_len()) ]
-          ## END code to update
+
         raise UnsupportedEncAlgError(sa.esp_enc_alg, "unsupported") 
 
     def icv_len(self):

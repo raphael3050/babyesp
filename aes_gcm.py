@@ -6,10 +6,8 @@ from typing import Tuple
 
 def nonce_info( cipher )-> Tuple[ bytes, int ]:
   """returns nonce value and nonce length """
-  ## BEGIN CODE TO BE CHANGED'
   nonce = cipher.nonce
   nonce_len = len(nonce)
-  ## END CODE TO BE CHANGED
   return nonce, nonce_len 
 
 print( "================================================" )
@@ -63,14 +61,12 @@ def encrypt_and_digest( key:bytes, nonce_dict:dict, clear_text:bytes ) -> dict:
       of the encrypted clear_text
   """
   output_dict = {}
-  ## BEGIN CODE TO BE CHANGED
   for k in nonce_dict:
     cipher = AES.new(key, AES.MODE_GCM,\
                        nonce=nonce_dict.get(k), mac_len=16)
     ciphertext, icv = \
       cipher.encrypt_and_digest(clear_text)
     output_dict[k]= (nonce_dict.get(k),ciphertext,icv)
-  ## END CODE TO BE CHANGED
   return output_dict
 
 

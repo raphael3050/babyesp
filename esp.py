@@ -4,9 +4,6 @@ from construct.lib import *
 from sa import SA, Error
 
 
-## Teh section to be completed are indicated with
-## BEGIN_CODE and END_CODE.
-
 """
 
 https://pycryptodome.readthedocs.io/en/latest/src/cipher/modern.html
@@ -92,7 +89,7 @@ class ESP:
         """
 
         ciphers = self.sa.ciphers_obj()
-        if len(ciphers) == 1: #AEAD
+        if len(ciphers) == 1: 
             data = ciphers[0].decrypt_and_verify(\
                    payload['encrypted_payload'], payload['icv'])
         return data
@@ -102,13 +99,6 @@ class ESP:
         """ returns padding bytes """
         ##padding_length = 8 - (data_len % 8)
 
-        ### Complete the code so it returns the necessary 
-        ### padding bytes for an ESP packet. The padding 
-        ### bytes are derived from data_len the length 
-        ### expressed in number of bytes of the Data 
-        ### Payload 
-
-        ##BEGIN_CODE
         padding_bytes = b'\x01'
         pad_len = len(padding_bytes)
         i = 2
@@ -117,7 +107,6 @@ class ESP:
             pad_len = len(padding_bytes)
             i = i+1
         return padding_bytes
-        ##END_CODE
 
     def pack(self, data, pad_len=None, next_header="IPv6"):
         """ Generates an ESP encrypted packet
@@ -224,12 +213,7 @@ print("data payload: %s"%alice_inner_ip_pkt)
 ## Encapsulation of the inner packet in to ESP 
 print("-- Alice Clear text ESP payload")
 pad = esp.pad(len(alice_inner_ip_pkt))
-
-### Complete the structure associated to the ESP
-### payload with the appropriated expressions for
-### XXX. Express pad_len as a function of pad. 
-### next_header should be given the value that 
-### describes data as an IPv6 packet.  
+  
 alice_clear_text_esp = {'data':alice_inner_ip_pkt,\
                         'pad':pad,\
                         'pad_len': len(pad), \
@@ -246,13 +230,9 @@ bytes_esp = esp.to_bytes(alice_esp)
 print("  esp: %s"%hexlify(bytes_esp))
 
 print("-- Bob receives the packet")
-### Complete the code so that bytes_esp which has
-### a byte format is converted into a structure 
-### such as a dictionary. The returned dictionary 
-### is designated as bob_esp. 
-#BEGIN_CODE
+
 bob_esp = esp.from_bytes(bytes_esp)
-#END_CODE
+
 print(bob_esp)
 
 print("-- Bob decrypts the encrypted part")
@@ -260,12 +240,6 @@ encrypted_esp = {\
   'encrypted_payload': bob_esp['encrypted_payload'], \
   'icv': bob_esp['icv']}
 
-### Complete the code with the function that takes 
-### the encrypted_esp structure proceed to the 
-### decryption and returns the structure associated 
-### to the clear text esp. This structure is 
-### designated as bob_clear_text_esp. The data
-### alice_inner_ip_pkt is read from this structure. 
 
 bob_clear_text_esp = esp.unpack(encrypted_esp)
 print(bob_clear_text_esp)
